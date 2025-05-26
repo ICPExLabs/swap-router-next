@@ -12,6 +12,8 @@
         "dfinity",
         "ianvs",
         "icpex",
-        "jestconfig"
+        "jestconfig",
+        "nanos",
+        "subaccount"
     ]
 }
