@@ -42,7 +42,13 @@ const inner_find_all_paths = (
     from_token: string,
     to_token: string,
 ): [string, SwapDirection][][] => {
+    // console.debug(
+    //     `pools: ${pools.size}, from: ${from_token}, to: ${to_token}, used: [${used.map((u) => `${u[0]}{${u[1].token_in}->${u[1].token_out}}`).join(', ')}]`,
+    // );
+
     if (from_token === to_token) return [[...used]];
+
+    if (3 < used.length) return [];
 
     const all_paths: [string, SwapDirection][][] = [];
     for (const [key, pool] of pools) {

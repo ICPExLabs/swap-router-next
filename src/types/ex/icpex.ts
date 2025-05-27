@@ -43,6 +43,8 @@ const swap_v2_market_maker_view_amount_out = (
     amount_in: bigint,
     token_in: string,
 ): bigint => {
+    if (self.reserve0 === '0' || self.reserve1 === '0') return 0n;
+
     const [reserve_in, reserve_out] =
         token_in === self.token0
             ? [BigInt(self.reserve0), BigInt(self.reserve1)]

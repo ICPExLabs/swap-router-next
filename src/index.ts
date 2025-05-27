@@ -1,7 +1,10 @@
 import _ from 'lodash';
 
-import { quote_icp_by_icp_swap } from './canisters/icpex/swap';
+import { query_icpex_pools } from './canisters/icpex-swap';
+import { query_kongswap_pools, query_kongswap_tokens } from './canisters/kong-swap';
 import { find_all_paths } from './path';
+import { CombinedPairPoolIcpex } from './types/ex/icpex';
+import { CombinedPairPoolKongswap } from './types/ex/kongswap';
 import { PairSwapPath } from './types/pair';
 import {
     CombinedPairPool,
@@ -20,9 +23,17 @@ export const pair_swap_exact_tokens_by = async (
     const pools = await Promise.all(
         anchors.map((anchor) =>
             match_combined_pair_pool_anchor_async<CombinedPairPool[]>(anchor, {
-                icpex: async (anchor) => {
-                    const pools = await quote_icp_by_icp_swap(anchor);
+                icpex: async (anchor): Promise<{ icpex: CombinedPairPoolIcpex }[]> => {
+                    const pools = await query_icpex_pools(anchor);
                     return pools.map((pool) => ({ icpex: { anchor, pool } }));
+                },
+                kongswap: async (anchor): Promise<{ kongswap: CombinedPairPoolKongswap }[]> => {
+                    const [tokens, pools, user] = await Promise.all([
+                        query_kongswap_tokens(anchor.anchor),
+                        query_kongswap_pools(anchor.anchor),
+                        anchor.fetch_user(),
+                    ]);
+                    return pools.map((pool) => ({ kongswap: { anchor: anchor.anchor, tokens, user, pool } }));
                 },
             }),
         ),
@@ -71,8 +82,16 @@ export const get_pair_swap_exact_tokens_paths_by = async (
         anchors.map((anchor) =>
             match_combined_pair_pool_anchor_async<CombinedPairPool[]>(anchor, {
                 icpex: async (anchor) => {
-                    const pools = await quote_icp_by_icp_swap(anchor);
+                    const pools = await query_icpex_pools(anchor);
                     return pools.map((pool) => ({ icpex: { anchor, pool } }));
+                },
+                kongswap: async (anchor): Promise<{ kongswap: CombinedPairPoolKongswap }[]> => {
+                    const [tokens, pools, user] = await Promise.all([
+                        query_kongswap_tokens(anchor.anchor),
+                        query_kongswap_pools(anchor.anchor),
+                        anchor.fetch_user(),
+                    ]);
+                    return pools.map((pool) => ({ kongswap: { anchor: anchor.anchor, tokens, user, pool } }));
                 },
             }),
         ),

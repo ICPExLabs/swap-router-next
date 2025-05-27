@@ -12,7 +12,14 @@
         "dfinity",
         "ianvs",
         "icpex",
+        "icrc1",
+        "icrc10",
+        "icrc2",
+        "icrc21",
+        "icrc28",
+        "icrc3",
         "jestconfig",
+        "Kongswap",
         "nanos",
         "subaccount"
     ]

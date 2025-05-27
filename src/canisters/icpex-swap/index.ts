@@ -1,10 +1,10 @@
 import { bigint2string, getAnonymousActorCreator, principal2string, unwrapOption } from '@choptop/haw';
 
-import { IcpexPairPool } from '../../../types/ex/icpex';
+import { IcpexPairPool } from '../../types/ex/icpex';
 import { idlFactory } from './candid';
 import type { _SERVICE } from './candid.d';
 
-export const quote_icp_by_icp_swap = async (canister_id: string): Promise<IcpexPairPool[]> => {
+export const query_icpex_pools = async (canister_id: string): Promise<IcpexPairPool[]> => {
     const actor: _SERVICE = await getAnonymousActorCreator()(idlFactory, canister_id);
     const r = await actor.pairs_query();
     return r
