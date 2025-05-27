@@ -34,8 +34,8 @@ test('test swap', async () => {
                 },
             },
         ],
-        'hhaaz-2aaaa-aaaaq-aacla-cai',
         'ryjl3-tyaaa-aaaaa-aaaba-cai',
+        'hhaaz-2aaaa-aaaaq-aacla-cai',
         100000000n,
     );
     console.log(paths);
