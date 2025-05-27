@@ -96,6 +96,7 @@ const nat_to_decimal_precision = (n: bigint, from_decimal_precision: number, to_
     return nn;
 };
 
+// https://github.com/KongSwap/kong/blob/0f8aa2d6490ef8feda0fb091ee10aaab3a343686/src/kong_backend/src/swap/swap_amounts.rs#L463
 const swap_amount_0 = (
     tokens: KongswapToken[],
     pool: KongswapPool,
@@ -148,6 +149,7 @@ const swap_amount_0 = (
     return amount_1 - lp_fee - gas_fee;
 };
 
+// https://github.com/KongSwap/kong/blob/0f8aa2d6490ef8feda0fb091ee10aaab3a343686/src/kong_backend/src/swap/swap_amounts.rs#L555
 const swap_amount_1 = (
     tokens: KongswapToken[],
     pool: KongswapPool,

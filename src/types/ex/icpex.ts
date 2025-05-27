@@ -38,6 +38,7 @@ export interface SwapV2MarketMakerView {
     protocol_fee?: SwapRatioView;
 }
 
+// https://github.com/ICPExLabs/swap-canister-next/blob/846b0aebb04582e54489b8182df171d0091a617f/common/src/types/common/amm/amm_constant_product.rs#L167
 const swap_v2_market_maker_view_amount_out = (
     self: SwapV2MarketMakerView,
     amount_in: bigint,
