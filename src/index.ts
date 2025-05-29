@@ -1,9 +1,11 @@
 import _ from 'lodash';
 
 import { query_icpex_pools } from './canisters/icpex-swap';
+import { query_icpswap_pools } from './canisters/icpswap/router';
 import { query_kongswap_pools, query_kongswap_tokens } from './canisters/kong-swap';
 import { find_all_paths } from './path';
 import { CombinedPairPoolIcpex } from './types/ex/icpex';
+import { CombinedPairPoolIcpswap } from './types/ex/icpswap';
 import { CombinedPairPoolKongswap } from './types/ex/kongswap';
 import { PairSwapPath } from './types/pair';
 import {
@@ -34,6 +36,10 @@ export const pair_swap_exact_tokens_by = async (
                         anchor.fetch_user(),
                     ]);
                     return pools.map((pool) => ({ kongswap: { anchor: anchor.anchor, tokens, user, pool } }));
+                },
+                icpswap: async (anchor): Promise<{ icpswap: CombinedPairPoolIcpswap }[]> => {
+                    const pools = await query_icpswap_pools(anchor);
+                    return pools.map((pool) => ({ icpswap: { anchor, pool } }));
                 },
             }),
         ),
@@ -77,6 +83,7 @@ export const get_pair_swap_exact_tokens_paths_by = async (
     from_token: string,
     to_token: string,
     from_amount: bigint,
+    reserve_zero = false,
 ): Promise<PairSwapPath[]> => {
     const pools = await Promise.all(
         anchors.map((anchor) =>
@@ -93,6 +100,10 @@ export const get_pair_swap_exact_tokens_paths_by = async (
                     ]);
                     return pools.map((pool) => ({ kongswap: { anchor: anchor.anchor, tokens, user, pool } }));
                 },
+                icpswap: async (anchor): Promise<{ icpswap: CombinedPairPoolIcpswap }[]> => {
+                    const pools = await query_icpswap_pools(anchor);
+                    return pools.map((pool) => ({ icpswap: { anchor, pool } }));
+                },
             }),
         ),
     );
@@ -101,6 +112,7 @@ export const get_pair_swap_exact_tokens_paths_by = async (
         from_token,
         to_token,
         from_amount,
+        reserve_zero,
     );
 };
 
@@ -109,6 +121,7 @@ export const get_pair_swap_exact_tokens_paths = (
     from_token: string,
     to_token: string,
     from_amount: bigint,
+    reserve_zero: boolean,
 ): PairSwapPath[] => {
     if (from_amount <= 0n) throw new Error('from_amount must be positive');
 
@@ -128,7 +141,7 @@ export const get_pair_swap_exact_tokens_paths = (
 
     // 3. sort
     paths = _.sortBy(
-        paths.filter((p) => 0n < p.to_amount),
+        paths.filter((p) => (reserve_zero ? true : 0n < p.to_amount)),
         [(p) => -p.to_amount],
     );
 

@@ -12,6 +12,7 @@
         "dfinity",
         "ianvs",
         "icpex",
+        "Icpswap",
         "icrc1",
         "icrc10",
         "icrc2",
@@ -20,7 +21,9 @@
         "icrc3",
         "jestconfig",
         "Kongswap",
+        "Motoko",
         "nanos",
+        "Passcodes",
         "subaccount"
     ]
 }
