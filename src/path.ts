@@ -109,7 +109,7 @@ export class PairPath {
 
     public calculate(from_amount: bigint): PairSwapPath {
         const cloned = this.clone();
-        cloned.debug();
+        // cloned.debug();
         return cloned._calculate(from_amount);
     }
 
