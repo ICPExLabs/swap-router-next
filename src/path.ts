@@ -54,7 +54,7 @@ const inner_find_all_paths = (
 
     if (from_token === to_token) return [[...used]];
 
-    if (max_path_length !== undefined && max_path_length < used.length) return [];
+    if (max_path_length !== undefined && max_path_length <= used.length) return [];
 
     const all_paths: [string, SwapDirection][][] = [];
     for (const [key, pool] of pools) {
