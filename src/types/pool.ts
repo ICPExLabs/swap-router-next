@@ -84,10 +84,16 @@ export const match_combined_pair_pool_async = async <T>(
     {
         icpex,
         kongswap,
-    }: { icpex: (pool: CombinedPairPoolIcpex) => Promise<T>; kongswap: (pool: CombinedPairPoolKongswap) => Promise<T> },
+        icpswap,
+    }: {
+        icpex: (pool: CombinedPairPoolIcpex) => Promise<T>;
+        kongswap: (pool: CombinedPairPoolKongswap) => Promise<T>;
+        icpswap: (pool: CombinedPairPoolIcpswap) => T;
+    },
 ): Promise<T> => {
     if ('icpex' in pool) return icpex(pool.icpex);
     if ('kongswap' in pool) return kongswap(pool.kongswap);
+    if ('icpswap' in pool) return icpswap(pool.icpswap);
     throw new Error(`unknown pool: ${JSON.stringify(pool)}`);
 };
 
