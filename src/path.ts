@@ -14,6 +14,7 @@ export const find_all_paths = (
     pools: Map<string, CombinedPairPool>,
     from_token: string,
     to_token: string,
+    max_path_length: number | undefined,
 ): PairPath[] => {
     const all_paths: [string, SwapDirection][][] = [];
 
@@ -24,13 +25,13 @@ export const find_all_paths = (
         if (token0 === from_token) {
             used.push([key, { token_in: token0, token_out: token1 }]);
             touched.push(token0);
-            const paths = inner_find_all_paths(pools, used, touched, token1, to_token);
+            const paths = inner_find_all_paths(pools, used, touched, token1, to_token, max_path_length);
             all_paths.push(...paths);
             used.pop();
         } else if (token1 === from_token) {
             used.push([key, { token_in: token1, token_out: token0 }]);
             touched.push(token1);
-            const paths = inner_find_all_paths(pools, used, touched, token0, to_token);
+            const paths = inner_find_all_paths(pools, used, touched, token0, to_token, max_path_length);
             all_paths.push(...paths);
             used.pop();
         }
@@ -45,12 +46,15 @@ const inner_find_all_paths = (
     touched: string[],
     from_token: string,
     to_token: string,
+    max_path_length: number | undefined,
 ): [string, SwapDirection][][] => {
     // console.debug(
     //     `pools: ${pools.size}, from: ${from_token}, to: ${to_token}, used: [${used.map((u) => `${u[0]}{${u[1].token_in}->${u[1].token_out}}`).join(', ')}]`,
     // );
 
     if (from_token === to_token) return [[...used]];
+
+    if (max_path_length !== undefined && max_path_length < used.length) return [];
 
     const all_paths: [string, SwapDirection][][] = [];
     for (const [key, pool] of pools) {
@@ -61,14 +65,14 @@ const inner_find_all_paths = (
             if (touched.includes(token1)) continue;
             used.push([key, { token_in: token0, token_out: token1 }]);
             touched.push(token0);
-            const paths = inner_find_all_paths(pools, used, touched, token1, to_token);
+            const paths = inner_find_all_paths(pools, used, touched, token1, to_token, max_path_length);
             all_paths.push(...paths);
             used.pop();
         } else if (token1 === from_token) {
             if (touched.includes(token1)) continue;
             used.push([key, { token_in: token1, token_out: token0 }]);
             touched.push(token1);
-            const paths = inner_find_all_paths(pools, used, touched, token0, to_token);
+            const paths = inner_find_all_paths(pools, used, touched, token0, to_token, max_path_length);
             all_paths.push(...paths);
             used.pop();
         }

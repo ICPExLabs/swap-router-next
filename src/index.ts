@@ -83,7 +83,7 @@ export const get_pair_swap_exact_tokens_paths_by = async (
     from_token: string,
     to_token: string,
     from_amount: bigint,
-    reserve_zero = false,
+    options: { max_path_length?: number; reserve_zero: boolean } = { reserve_zero: false },
 ): Promise<PairSwapPath[]> => {
     const pools = await Promise.all(
         anchors.map((anchor) =>
@@ -112,7 +112,7 @@ export const get_pair_swap_exact_tokens_paths_by = async (
         from_token,
         to_token,
         from_amount,
-        reserve_zero,
+        options,
     );
 };
 
@@ -121,7 +121,7 @@ export const get_pair_swap_exact_tokens_paths = (
     from_token: string,
     to_token: string,
     from_amount: bigint,
-    reserve_zero: boolean,
+    options: { max_path_length?: number; reserve_zero: boolean },
 ): PairSwapPath[] => {
     if (from_amount <= 0n) throw new Error('from_amount must be positive');
 
@@ -134,14 +134,14 @@ export const get_pair_swap_exact_tokens_paths = (
     }
 
     // 1. find all path
-    const all_paths = find_all_paths(pools, from_token, to_token);
+    const all_paths = find_all_paths(pools, from_token, to_token, options.max_path_length);
 
     // 2. calculate
     let paths = all_paths.map((path) => path.calculate(from_amount));
 
     // 3. sort
     paths = _.sortBy(
-        paths.filter((p) => (reserve_zero ? true : 0n < p.to_amount)),
+        paths.filter((p) => (options.reserve_zero ? true : 0n < p.to_amount)),
         [(p) => -p.to_amount],
     );
 

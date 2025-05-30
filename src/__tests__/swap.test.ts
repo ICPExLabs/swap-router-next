@@ -49,7 +49,7 @@ test('test swap', async () => {
         'ryjl3-tyaaa-aaaaa-aaaba-cai',
         'lvfsa-2aaaa-aaaaq-aaeyq-cai',
         100000000n,
-        true,
+        { reserve_zero: true },
     );
     console.log(paths);
 });
