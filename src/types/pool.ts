@@ -88,7 +88,7 @@ export const match_combined_pair_pool_async = async <T>(
     }: {
         icpex: (pool: CombinedPairPoolIcpex) => Promise<T>;
         kongswap: (pool: CombinedPairPoolKongswap) => Promise<T>;
-        icpswap: (pool: CombinedPairPoolIcpswap) => T;
+        icpswap: (pool: CombinedPairPoolIcpswap) => Promise<T>;
     },
 ): Promise<T> => {
     if ('icpex' in pool) return icpex(pool.icpex);
