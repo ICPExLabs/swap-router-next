@@ -69,7 +69,7 @@ const inner_find_all_paths = (
             all_paths.push(...paths);
             used.pop();
         } else if (token1 === from_token) {
-            if (touched.includes(token1)) continue;
+            if (touched.includes(token0)) continue;
             used.push([key, { token_in: token1, token_out: token0 }]);
             touched.push(token1);
             const paths = inner_find_all_paths(pools, used, touched, token0, to_token, max_path_length);

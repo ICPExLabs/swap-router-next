@@ -1,4 +1,4 @@
-import { get_pair_swap_exact_tokens_paths_by } from '..';
+// import { get_pair_swap_exact_tokens_paths_by } from '..';
 
 test('test swap', async () => {
     // await pair_swap_exact_tokens_by(
@@ -7,7 +7,6 @@ test('test swap', async () => {
     //     'lvfsa-2aaaa-aaaaq-aaeyq-cai',
     //     100000000n,
     // );
-
     // const paths = await get_pair_swap_exact_tokens_paths_by(
     //     [{ icpex: 'arfmo-qqaaa-aaaaj-az7ta-cai' }],
     //     'ryjl3-tyaaa-aaaaa-aaaba-cai',
@@ -15,7 +14,6 @@ test('test swap', async () => {
     //     100000000n,
     // );
     // console.log(paths);
-
     // const paths = await get_pair_swap_exact_tokens_paths_by(
     //     [
     //         {
@@ -39,17 +37,16 @@ test('test swap', async () => {
     //     100000000n,
     // );
     // console.log(paths);
-
-    const paths = await get_pair_swap_exact_tokens_paths_by(
-        [
-            {
-                icpswap: '4mmnk-kiaaa-aaaag-qbllq-cai',
-            },
-        ],
-        'ryjl3-tyaaa-aaaaa-aaaba-cai',
-        'lvfsa-2aaaa-aaaaq-aaeyq-cai',
-        100000000n,
-        { reserve_zero: true },
-    );
-    console.log(paths);
+    // const paths = await get_pair_swap_exact_tokens_paths_by(
+    //     [
+    //         {
+    //             icpswap: '4mmnk-kiaaa-aaaag-qbllq-cai',
+    //         },
+    //     ],
+    //     'ryjl3-tyaaa-aaaaa-aaaba-cai',
+    //     'lvfsa-2aaaa-aaaaq-aaeyq-cai',
+    //     100000000n,
+    //     { reserve_zero: true },
+    // );
+    // console.log(paths);
 });

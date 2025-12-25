@@ -1,6 +1,6 @@
 {
     "name": "@icpex/router",
-    "version": "0.0.7",
+    "version": "0.0.8",
     "private": false,
     "description": "",
     "author": "",
@@ -25,11 +25,11 @@
     },
     "dependencies": {
         "@aws-crypto/sha256-js": "^5.2.0",
-        "@choptop/haw": "^0.0.13",
-        "@dfinity/agent": "^2.4.1",
-        "@dfinity/candid": "^2.4.1",
-        "@dfinity/identity": "^2.4.1",
-        "@dfinity/principal": "^2.4.1",
+        "@choptop/haw": "^0.0.16",
+        "@dfinity/agent": "=3.1.0",
+        "@dfinity/candid": "=3.1.0",
+        "@dfinity/identity": "=3.1.0",
+        "@dfinity/principal": "=3.1.0",
         "bignumber.js": "^9.3.0",
         "lodash": "^4.17.21"
     },
