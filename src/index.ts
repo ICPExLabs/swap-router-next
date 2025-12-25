@@ -31,7 +31,7 @@ export const pair_swap_exact_tokens_by = async (
                 },
                 kongswap: async (anchor): Promise<{ kongswap: CombinedPairPoolKongswap }[]> => {
                     const [tokens, pools, user] = await Promise.all([
-                        query_kongswap_tokens(anchor.anchor),
+                        query_kongswap_tokens(anchor.anchor, [from_token, to_token]),
                         query_kongswap_pools(anchor.anchor),
                         anchor.fetch_user(),
                     ]);
@@ -94,7 +94,7 @@ export const get_pair_swap_exact_tokens_paths_by = async (
                 },
                 kongswap: async (anchor): Promise<{ kongswap: CombinedPairPoolKongswap }[]> => {
                     const [tokens, pools, user] = await Promise.all([
-                        query_kongswap_tokens(anchor.anchor),
+                        query_kongswap_tokens(anchor.anchor, [from_token, to_token]),
                         query_kongswap_pools(anchor.anchor),
                         anchor.fetch_user(),
                     ]);

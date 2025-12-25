@@ -4,50 +4,55 @@ import { KongswapPool, KongswapToken } from '../../types/ex/kongswap';
 import { idlFactory } from './candid';
 import type { _SERVICE } from './candid.d';
 
-export const query_kongswap_tokens = async (canister_id: string): Promise<KongswapToken[]> => {
+export const query_kongswap_tokens = async (canister_id: string, tokens: string[]): Promise<KongswapToken[]> => {
     const actor: _SERVICE = await getAnonymousActorCreator()(idlFactory, canister_id);
-    const r = await actor.tokens([]);
-    return unwrapRustResultMap(
-        r,
-        (r) => {
-            return r
-                .filter((r) => ('LP' in r ? !r.LP.is_removed : !r.IC.is_removed))
-                .map(
-                    (r): KongswapToken =>
-                        'LP' in r
-                            ? {
-                                  LP: {
-                                      token_id: r.LP.token_id,
-                                      chain: r.LP.chain,
-                                      address: r.LP.address,
-                                      name: r.LP.name,
-                                      symbol: r.LP.symbol,
-                                      pool_id_of: r.LP.pool_id_of,
-                                      decimals: r.LP.decimals,
-                                      fee: bigint2string(r.LP.fee),
-                                      total_supply: bigint2string(r.LP.total_supply),
-                                      is_removed: r.LP.is_removed,
-                                  },
-                              }
-                            : {
-                                  IC: {
-                                      token_id: r.IC.token_id,
-                                      chain: r.IC.chain,
-                                      canister_id: r.IC.canister_id,
-                                      name: r.IC.name,
-                                      symbol: r.IC.symbol,
-                                      decimals: r.IC.decimals,
-                                      fee: bigint2string(r.IC.fee),
-                                      icrc1: r.IC.icrc1,
-                                      icrc2: r.IC.icrc2,
-                                      icrc3: r.IC.icrc3,
-                                      is_removed: r.IC.is_removed,
-                                  },
-                              },
-                );
-        },
-        () => [],
-    );
+    const rs = await Promise.all(tokens.map((token) => actor.tokens([token])));
+
+    return rs
+        .map((r) =>
+            unwrapRustResultMap(
+                r,
+                (r) => {
+                    return r
+                        .filter((r) => ('LP' in r ? !r.LP.is_removed : !r.IC.is_removed))
+                        .map(
+                            (r): KongswapToken =>
+                                'LP' in r
+                                    ? {
+                                          LP: {
+                                              token_id: r.LP.token_id,
+                                              chain: r.LP.chain,
+                                              address: r.LP.address,
+                                              name: r.LP.name,
+                                              symbol: r.LP.symbol,
+                                              pool_id_of: r.LP.pool_id_of,
+                                              decimals: r.LP.decimals,
+                                              fee: bigint2string(r.LP.fee),
+                                              total_supply: bigint2string(r.LP.total_supply),
+                                              is_removed: r.LP.is_removed,
+                                          },
+                                      }
+                                    : {
+                                          IC: {
+                                              token_id: r.IC.token_id,
+                                              chain: r.IC.chain,
+                                              canister_id: r.IC.canister_id,
+                                              name: r.IC.name,
+                                              symbol: r.IC.symbol,
+                                              decimals: r.IC.decimals,
+                                              fee: bigint2string(r.IC.fee),
+                                              icrc1: r.IC.icrc1,
+                                              icrc2: r.IC.icrc2,
+                                              icrc3: r.IC.icrc3,
+                                              is_removed: r.IC.is_removed,
+                                          },
+                                      },
+                        );
+                },
+                () => [],
+            ),
+        )
+        .flatMap((s) => s);
 };
 
 export const query_kongswap_pools = async (canister_id: string): Promise<KongswapPool[]> => {
